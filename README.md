@@ -2,13 +2,13 @@
 
 Danh mục tất cả project của tôi ([LeBao2808](https://github.com/LeBao2808)) ở một chỗ. Project được chia theo loại **Tool / Extension / App / Game**. Mỗi project có trang chi tiết gồm ảnh chụp, tính năng, cách cài đặt, cách sử dụng, các lệnh hay dùng và lưu ý.
 
-| Project | Loại | Mô tả |
-|---|---|---|
-| [Agent Office 3D](https://github.com/LeBao2808/agent-office-3d) | Tool | Xem Claude Code làm việc trực tiếp trong văn phòng 3D |
-| [Claude Pixel BG](https://github.com/LeBao2808/claude-pixel-bg) | Extension | Hình nền pixel-art động cho claude.ai và VS Code |
-| [Aurora Riverside Hotel](https://github.com/LeBao2808/aurora-hotel) | App | Website khách sạn, kiến trúc microservice |
-| [TOEIC Speaking Coach](https://github.com/LeBao2808/learning-english) | App | Luyện nói/viết TOEIC với AI Gemini |
-| [Làng Phòng Thủ](https://github.com/LeBao2808/village-defense-live) | Game | Game tương tác TikTok LIVE |
+| Project | Loại | Mô tả | Dùng online |
+|---|---|---|---|
+| [Agent Office 3D](https://github.com/LeBao2808/agent-office-3d) | Tool | Xem Claude Code làm việc trực tiếp trong văn phòng 3D | — |
+| [Claude Pixel BG](https://github.com/LeBao2808/claude-pixel-bg) | Extension | Hình nền pixel-art động cho claude.ai và VS Code | — |
+| [Aurora Riverside Hotel](https://github.com/LeBao2808/aurora-hotel) | App | Website khách sạn, kiến trúc microservice | [aurora-hotel-red.vercel.app](https://aurora-hotel-red.vercel.app) |
+| [TOEIC Speaking Coach](https://github.com/LeBao2808/learning-english) | App | Luyện nói/viết TOEIC với AI Gemini | [learning-english-xi.vercel.app](https://learning-english-xi.vercel.app) |
+| [Làng Phòng Thủ](https://github.com/LeBao2808/village-defense-live) | Game | Game tương tác TikTok LIVE | — |
 
 ## Xem
 
@@ -27,6 +27,7 @@ Phím tắt: `/` để tìm kiếm (gõ không dấu cũng được), `Esc` đ�
 
    | Trường | Ý nghĩa |
    |---|---|
+   | `demo`, `demoNote` | Link bản đã deploy (https) và lưu ý khi mở. Có `demo` thì hiện nhãn Online, nút Mở app và mục nổi bật |
    | `slug` | ID trong URL (`#/p/<slug>`), chỉ gồm `a-z 0-9 -` |
    | `category` | `tool`, `extension`, `app` hoặc `game` (thêm loại mới trong `window.CATEGORIES`) |
    | `folder` | Tên thư mục trong `D:\Project` |

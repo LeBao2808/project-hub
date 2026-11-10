@@ -2,6 +2,9 @@
  * Danh mục project. Thêm project mới: copy một khối bên dưới, sửa nội dung,
  * đặt ảnh vào assets/<slug>/, rồi chạy `npm run check`.
  *
+ * Project đã deploy: thêm `demo: "https://..."` (và `demoNote` nếu cần lưu ý).
+ * Site sẽ tự hiện nhãn "Online", nút mở bản chạy thật và đưa project lên mục nổi bật.
+ *
  * File này là script thường (không phải ES module) để index.html mở được
  * trực tiếp bằng file:// mà không cần server.
  */
@@ -158,9 +161,12 @@ window.PROJECTS = [
     tagline: "Website khách sạn 5 sao: đặt phòng, room service, thanh toán, kiến trúc microservice.",
     category: "app",
     accent: "#c8a165",
-    status: "Demo",
+    status: "Online",
     updated: "2026-11-08",
     repo: "https://github.com/LeBao2808/aurora-hotel",
+    demo: "https://aurora-hotel-red.vercel.app",
+    demoNote:
+      "Backend chạy trên gói miễn phí của Render, ngủ sau 15 phút không dùng. Lần đầu mở có thể mất khoảng 1 phút thì đặt phòng / thanh toán mới hoạt động.",
     folder: "aurora-hotel",
     stack: ["Next.js 16", "TypeScript", "Tailwind v4", "Node.js microservices", "Docker", "Vercel + Render"],
     tags: ["microservice", "booking", "payment", "saga", "full-stack"],
@@ -231,9 +237,10 @@ window.PROJECTS = [
     tagline: "Luyện nói và viết TOEIC với giám khảo AI (Google Gemini).",
     category: "app",
     accent: "#4f5bd5",
-    status: "Hoạt động",
+    status: "Online",
     updated: "2026-11-02",
     repo: "https://github.com/LeBao2808/learning-english",
+    demo: "https://learning-english-xi.vercel.app",
     folder: "learning-english",
     stack: ["Next.js 16", "React 19", "Tailwind v4", "Google Gemini", "Web Speech API"],
     tags: ["AI", "TOEIC", "education", "speech recognition"],

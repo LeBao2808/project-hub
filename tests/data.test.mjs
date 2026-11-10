@@ -33,6 +33,11 @@ for (const p of projects) {
     assert.ok(Array.isArray(p.usage) && p.usage.length >= 1, "cần hướng dẫn sử dụng");
     for (const u of p.usage) assert.ok(u.title && u.steps?.length, "mỗi mục usage cần title + steps");
     assert.ok(Array.isArray(p.stack) && p.stack.length, "cần stack");
+    if (p.demo !== undefined) {
+      assert.match(p.demo, /^https:\/\/[^\s]+$/, "demo phải là link https");
+      assert.ok(!p.demo.includes("localhost"), "demo không được trỏ tới localhost");
+    }
+    if (p.demoNote !== undefined) assert.ok(p.demo, "có demoNote thì phải có demo");
   });
 
   test(`${p.slug}: mọi ảnh đều tồn tại`, () => {

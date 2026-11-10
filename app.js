@@ -19,6 +19,10 @@
       .replace(/(^|[\s(])(https?:\/\/[^\s)<]+)/g, '$1<a href="$2" target="_blank" rel="noopener">$2</a>');
 
   const catVar = (id) => `--cat: var(--c-${id})`;
+  const host = (u) => String(u).replace(/^https?:\/\//, "").replace(/\/$/, "");
+  const LIVE = PROJECTS.filter((p) => p.demo);
+  const extIcon = `<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3H3.5A1.5 1.5 0 002 4.5v8A1.5 1.5 0 003.5 14h8a1.5 1.5 0 001.5-1.5V10M9 2h5v5M14 2 7.5 8.5"/></svg>`;
+  const ghIcon = `<svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38v-1.49c-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 014 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>`;
   const fmtDate = (iso) => {
     const [y, m, d] = String(iso).split("-");
     return d && m && y ? `${d}/${m}/${y}` : iso;
@@ -63,6 +67,7 @@
     if (kind === "p" && arg) return { view: "project", slug: arg };
     if (kind === "c" && arg) return { view: "home", cat: arg };
     if (kind === "tag" && arg) return { view: "home", tag: arg };
+    if (kind === "live") return { view: "home", live: true };
     return { view: "home" };
   }
 
@@ -76,34 +81,75 @@
   function renderNav(r) {
     const nav = document.getElementById("topnav");
     const current = r.view === "project" ? PROJECTS.find((p) => p.slug === r.slug)?.category : r.cat;
-    const links = [`<a href="#/"${r.view === "home" && !r.cat && !r.tag ? ' aria-current="page"' : ""}>Tất cả</a>`].concat(
-      CATEGORIES.filter((c) => PROJECTS.some((p) => p.category === c.id)).map(
-        (c) => `<a href="#/c/${c.id}"${current === c.id ? ' aria-current="page"' : ""}>${c.label}</a>`,
-      ),
-    );
+    const links = [`<a href="#/"${r.view === "home" && !r.cat && !r.tag && !r.live ? ' aria-current="page"' : ""}>Tất cả</a>`]
+      .concat(
+        CATEGORIES.filter((c) => PROJECTS.some((p) => p.category === c.id)).map(
+          (c) => `<a href="#/c/${c.id}"${current === c.id ? ' aria-current="page"' : ""}>${c.label}</a>`,
+        ),
+      )
+      .concat(LIVE.length ? [`<a class="nav-live" href="#/live"${r.live ? ' aria-current="page"' : ""}><i class="pulse"></i>Online</a>`] : []);
     nav.innerHTML = links.join("");
   }
 
   // ---------- home ----------
   function card(p) {
     const c = catById[p.category] || { label: p.category };
+    const shown = p.demo ? 2 : 3; // chừa chỗ cho nút "Mở app"
+    // Cả card bấm được nhờ .card-link::after phủ kín; nút "Mở app" nằm trên lớp phủ đó.
     return `
-      <a class="card" href="#/p/${encodeURIComponent(p.slug)}" style="--accent:${esc(p.accent)}" data-slug="${esc(p.slug)}">
+      <article class="card${p.demo ? " is-live" : ""}" style="--accent:${esc(p.accent)}" data-slug="${esc(p.slug)}">
         <div class="card-cover${p.portrait ? " portrait" : ""}">
           <img src="${esc(p.cover)}" alt="Ảnh chụp ${esc(p.name)}" loading="lazy" />
           <span class="cat-badge" style="${catVar(p.category)}">${c.icon || ""} ${esc(c.label)}</span>
+          ${p.demo ? `<span class="live-badge"><i class="pulse"></i>Online</span>` : ""}
         </div>
         <div class="card-body">
-          <div class="card-title"><span class="dot"></span><h3>${esc(p.name)}</h3></div>
+          <div class="card-title"><span class="dot"></span><h3><a class="card-link" href="#/p/${encodeURIComponent(p.slug)}">${esc(p.name)}</a></h3></div>
           <p>${esc(p.tagline)}</p>
           <div class="card-foot">
-            <div class="stack">${(p.stack || []).slice(0, 3).map((s) => `<span>${esc(s)}</span>`).join("")}${
-              (p.stack || []).length > 3 ? `<span>+${p.stack.length - 3}</span>` : ""
+            <div class="stack">${(p.stack || []).slice(0, shown).map((s) => `<span>${esc(s)}</span>`).join("")}${
+              (p.stack || []).length > shown ? `<span>+${p.stack.length - shown}</span>` : ""
             }</div>
-            <span class="arrow" aria-hidden="true">→</span>
+            ${
+              p.demo
+                ? `<a class="demo-link" href="${esc(p.demo)}" target="_blank" rel="noopener" aria-label="Mở ${esc(p.name)} (tab mới)">Mở app ${extIcon}</a>`
+                : `<span class="arrow" aria-hidden="true">→</span>`
+            }
           </div>
         </div>
-      </a>`;
+      </article>`;
+  }
+
+  function liveStrip() {
+    if (!LIVE.length) return "";
+    return `
+      <section class="live-strip" aria-labelledby="live-h">
+        <div class="live-head">
+          <h2 id="live-h"><i class="pulse"></i>Đang chạy online</h2>
+          <p>Mở là dùng được ngay, không cần cài đặt.</p>
+        </div>
+        <div class="live-grid">
+          ${LIVE.map((p) => {
+            const c = catById[p.category] || { label: p.category };
+            return `
+            <article class="live-card" style="--accent:${esc(p.accent)}" data-live="${esc(p.slug)}">
+              <a class="live-thumb" href="${esc(p.demo)}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+                <img src="${esc(p.cover)}" alt="" loading="lazy" />
+              </a>
+              <div class="live-info">
+                <span class="cat-badge" style="${catVar(p.category)}">${c.icon || ""} ${esc(c.label)}</span>
+                <h3>${esc(p.name)}</h3>
+                <p>${esc(p.tagline)}</p>
+                <a class="live-url" href="${esc(p.demo)}" target="_blank" rel="noopener">${esc(host(p.demo))}</a>
+                <div class="live-actions">
+                  <a class="btn primary sm" href="${esc(p.demo)}" target="_blank" rel="noopener">Mở app ${extIcon}</a>
+                  <a class="btn sm" href="#/p/${encodeURIComponent(p.slug)}">Hướng dẫn</a>
+                </div>
+              </div>
+            </article>`;
+          }).join("")}
+        </div>
+      </section>`;
   }
 
   function renderHome(r) {
@@ -112,28 +158,37 @@
     const stackCount = new Set(PROJECTS.flatMap((p) => p.stack || [])).size;
     const latest = sortByDate(PROJECTS)[0];
 
-    app.innerHTML = `
-      <div class="wrap fade-in">
-        <section class="hero">
-          <span class="eyebrow">Kho project · LeBao2808</span>
-          <h1>Mọi thứ tôi đã làm, <em>ở cùng một chỗ.</em></h1>
-          <p class="lead">${PROJECTS.length} project đã đưa lên GitHub, chia theo loại: tool, extension, app, game. Bấm vào từng project để xem ảnh chụp, tính năng và cách cài đặt, sử dụng chi tiết.</p>
-          <div class="stats">
-            <div class="stat"><b>${PROJECTS.length}</b><span>project</span></div>
-            ${usedCats
-              .map((c) => `<a class="stat" href="#/c/${c.id}" style="${catVar(c.id)}"><b>${counts[c.id]}</b><span>${c.icon} ${esc(c.label)}</span></a>`)
-              .join("")}
-            <div class="stat"><b>${stackCount}</b><span>công nghệ đã dùng</span></div>
-            ${latest ? `<a class="stat" href="#/p/${latest.slug}"><b style="font-size:17px;line-height:1.35">${esc(latest.name)}</b><span>mới cập nhật · ${fmtDate(latest.updated)}</span></a>` : ""}
-          </div>
-        </section>
+    const plain = !r.cat && !r.tag && !r.live;
 
-        <div class="toolbar">
+    app.innerHTML = `
+      <div class="hero-band fade-in">
+        <div class="wrap">
+          <section class="hero">
+            <span class="eyebrow">Kho project · LeBao2808</span>
+            <h1>Mọi thứ tôi đã làm, <em>ở cùng một chỗ.</em></h1>
+            <p class="lead">${PROJECTS.length} project đã đưa lên GitHub, chia theo loại: tool, extension, app, game. ${
+              LIVE.length ? `${LIVE.length} app đang chạy online, mở là dùng được ngay. ` : ""
+            }Bấm vào từng project để xem ảnh chụp, tính năng và cách cài đặt chi tiết.</p>
+            <div class="stats">
+              <div class="stat"><b>${PROJECTS.length}</b><span>project trên GitHub</span></div>
+              ${LIVE.length ? `<a class="stat stat-live" href="#/live"><b>${LIVE.length}</b><span><i class="pulse"></i>đang chạy online</span></a>` : ""}
+              <div class="stat"><b>${stackCount}</b><span>công nghệ đã dùng</span></div>
+              ${latest ? `<a class="stat" href="#/p/${latest.slug}"><b class="stat-name">${esc(latest.name)}</b><span>mới cập nhật · ${fmtDate(latest.updated)}</span></a>` : ""}
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div class="wrap fade-in">
+        ${plain ? liveStrip() : ""}
+
+        <div class="toolbar" id="browse">
           <div class="chips" role="group" aria-label="Lọc theo loại">
-            <a class="chip" href="#/" aria-pressed="${!r.cat}">Tất cả <span class="n">${PROJECTS.length}</span></a>
+            <a class="chip" href="#/" aria-pressed="${plain}">Tất cả <span class="n">${PROJECTS.length}</span></a>
             ${usedCats
-              .map((c) => `<a class="chip" href="#/c/${c.id}" aria-pressed="${r.cat === c.id}">${c.icon} ${esc(c.label)} <span class="n">${counts[c.id]}</span></a>`)
+              .map((c) => `<a class="chip" href="#/c/${c.id}" style="${catVar(c.id)}" aria-pressed="${r.cat === c.id}">${c.icon} ${esc(c.label)} <span class="n">${counts[c.id]}</span></a>`)
               .join("")}
+            ${LIVE.length ? `<a class="chip chip-live" href="#/live" aria-pressed="${!!r.live}"><i class="pulse"></i>Online <span class="n">${LIVE.length}</span></a>` : ""}
           </div>
           <label class="search">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -151,7 +206,11 @@
       renderResults(r);
     });
     renderResults(r);
-    document.title = r.cat && catById[r.cat] ? `${catById[r.cat].label} · Project Hub` : "Project Hub · LeBao2808";
+    document.title = r.cat && catById[r.cat]
+      ? `${catById[r.cat].label} · Project Hub`
+      : r.live
+        ? "Đang online · Project Hub"
+        : "Project Hub · LeBao2808";
   }
 
   function renderResults(r) {
@@ -160,6 +219,7 @@
     let list = sortByDate(PROJECTS);
     if (r.cat) list = list.filter((p) => p.category === r.cat);
     if (r.tag) list = list.filter((p) => [...(p.tags || []), ...(p.stack || [])].some((t) => fold(t) === fold(r.tag)));
+    if (r.live) list = list.filter((p) => p.demo);
     if (q) list = list.filter((p) => q.split(/\s+/).every((w) => haystack(p).includes(w)));
 
     if (!list.length) {
@@ -168,11 +228,13 @@
     }
     // Không lọc: xếp theo thứ tự category rồi theo ngày. Có lọc: kèm mô tả category / số kết quả.
     const order = Object.fromEntries(CATEGORIES.map((c, i) => [c.id, i]));
-    if (!r.cat && !r.tag && !q) list.sort((a, b) => (order[a.category] ?? 99) - (order[b.category] ?? 99));
+    if (!r.cat && !r.tag && !r.live && !q) list.sort((a, b) => (order[a.category] ?? 99) - (order[b.category] ?? 99));
     const cat = r.cat && catById[r.cat];
     const head = cat && !q
       ? `<span class="cat-badge" style="${catVar(cat.id)}">${cat.icon} ${esc(cat.label)}</span><p>${esc(cat.desc)}</p>`
-      : `<p>${r.cat || r.tag || q ? `${list.length} kết quả` : `Tất cả ${list.length} project`}</p>`;
+      : r.live && !q
+        ? `<span class="live-badge static"><i class="pulse"></i>Online</span><p>Project đã deploy, bấm <b>Mở app</b> để dùng thử ngay trên trình duyệt.</p>`
+        : `<p>${r.cat || r.tag || r.live || q ? `${list.length} kết quả` : `Tất cả ${list.length} project`}</p>`;
     out.innerHTML = `
       <div class="section-head">${head}</div>
       <div class="grid">${list.map(card).join("")}</div>`;
@@ -238,18 +300,27 @@
         <header class="detail-head">
           <div class="head-meta">
             <a class="cat-badge" href="#/c/${p.category}" style="${catVar(p.category)}">${c.icon || ""} ${esc(c.label)}</a>
-            ${p.status ? `<span class="pill">${esc(p.status)}</span>` : ""}
+            ${p.demo ? `<span class="live-badge static"><i class="pulse"></i>Online</span>` : p.status ? `<span class="pill">${esc(p.status)}</span>` : ""}
             <span class="pill">Cập nhật ${fmtDate(p.updated)}</span>
           </div>
           <h1><span class="dot"></span>${esc(p.name)}</h1>
           <p class="lead">${md(p.tagline)}</p>
           <div class="actions">
-            <a class="btn primary" href="${esc(p.repo)}" target="_blank" rel="noopener">
-              <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38v-1.49c-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 014 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-              Xem trên GitHub
-            </a>
+            ${
+              p.demo
+                ? `<a class="btn primary btn-demo" href="${esc(p.demo)}" target="_blank" rel="noopener"><i class="pulse"></i>Mở bản chạy thật ${extIcon}</a>`
+                : ""
+            }
+            <a class="btn btn-repo${p.demo ? "" : " primary"}" href="${esc(p.repo)}" target="_blank" rel="noopener">${ghIcon} Xem trên GitHub</a>
             <button class="btn" type="button" data-copy="${esc(clone)}">Copy lệnh git clone</button>
           </div>
+          ${
+            p.demo
+              ? `<p class="demo-line">Bản online: <a href="${esc(p.demo)}" target="_blank" rel="noopener">${esc(host(p.demo))}</a>${
+                  p.demoNote ? `<span class="demo-note">${md(p.demoNote)}</span>` : ""
+                }</p>`
+              : ""
+          }
         </header>
 
         <div class="gallery">
@@ -285,6 +356,7 @@
               <dl class="kv">
                 <dt>Loại</dt><dd>${c.icon || ""} ${esc(c.label)}</dd>
                 <dt>Trạng thái</dt><dd>${esc(p.status || "—")}</dd>
+                ${p.demo ? `<dt>Bản online</dt><dd><a href="${esc(p.demo)}" target="_blank" rel="noopener">${esc(host(p.demo))}</a></dd>` : ""}
                 <dt>Cập nhật</dt><dd>${fmtDate(p.updated)}</dd>
                 <dt>Thư mục</dt><dd><code>Project/${esc(p.folder || p.slug)}</code></dd>
                 <dt>Repo</dt><dd><a href="${esc(p.repo)}" target="_blank" rel="noopener">${esc(p.repo.replace("https://github.com/", ""))}</a></dd>

@@ -90,6 +90,41 @@ console.log("Landing page");
   }
   await page.goto(base + "#/");
 
+  const live = projects.filter((p) => p.demo);
+  await check("mục Đang chạy online liệt kê đúng app đã deploy", async () => {
+    const slugs = await page.locator(".live-card").evaluateAll((els) => els.map((e) => e.dataset.live));
+    expect(slugs.join() === live.map((p) => p.slug).join(), `có: ${slugs.join()}`);
+    for (const p of live) {
+      const hrefs = await page.locator(`.live-card[data-live="${p.slug}"] a[target="_blank"]`).evaluateAll((els) => els.map((e) => e.href.replace(/\/$/, "")));
+      expect(hrefs.length && hrefs.every((h) => h === p.demo), `${p.slug}: link sai ${hrefs.join()}`);
+    }
+  });
+  await check("card app đã deploy có nhãn Online + nút Mở app", async () => {
+    for (const p of projects) {
+      const btn = page.locator(`.card[data-slug="${p.slug}"] .demo-link`);
+      const badge = page.locator(`.card[data-slug="${p.slug}"] .live-badge`);
+      expect((await btn.count()) === (p.demo ? 1 : 0), `${p.slug}: số nút Mở app sai`);
+      expect((await badge.count()) === (p.demo ? 1 : 0), `${p.slug}: nhãn Online sai`);
+      if (p.demo) expect((await btn.getAttribute("href")) === p.demo, `${p.slug}: link Mở app sai`);
+    }
+  });
+  await check("bấm Mở app trên card mở tab mới, không chuyển trang chi tiết", async () => {
+    if (!live.length) return;
+    const ctx = page.context();
+    await ctx.route(/^https:\/\/(?!fonts\.)/, (route) => route.fulfill({ status: 200, body: "ok" }));
+    const [popup] = await Promise.all([ctx.waitForEvent("page"), page.locator(`.card[data-slug="${live[0].slug}"] .demo-link`).click()]);
+    expect(popup.url().replace(/\/$/, "") === live[0].demo, `tab mới: ${popup.url()}`);
+    await popup.close();
+    expect(await page.evaluate(() => location.hash === "#/" || location.hash === ""), "card bị chuyển trang");
+  });
+  await check("lọc Online", async () => {
+    await page.locator('.chips a[href="#/live"]').click();
+    await page.waitForFunction(() => location.hash === "#/live");
+    expect((await page.locator(".card").count()) === live.length, `mong ${live.length} card`);
+    expect((await page.locator(".live-strip").count()) === 0, "trang lọc không nên hiện mục nổi bật");
+  });
+  await page.goto(base + "#/");
+
   await check("tìm kiếm (không dấu) lọc đúng", async () => {
     await page.keyboard.press("/");
     expect(await page.evaluate(() => document.activeElement?.id === "q"), "phím / không focus ô tìm kiếm");
@@ -129,8 +164,15 @@ for (const p of projects) {
     expect((await page.locator(".features li").count()) === p.features.length, "số tính năng sai");
     expect((await page.locator(".code-step").count()) === p.quickstart.length + 1, "số bước cài đặt sai");
     expect((await page.locator(".howto section").count()) === p.usage.length, "số mục hướng dẫn sai");
-    const href = await page.locator("a.btn.primary").getAttribute("href");
+    const href = await page.locator("a.btn-repo").getAttribute("href");
     expect(href === p.repo, "link GitHub sai");
+    const demoBtn = page.locator("a.btn-demo");
+    if (p.demo) {
+      expect((await demoBtn.getAttribute("href")) === p.demo, "nút bản chạy thật sai link");
+      expect((await demoBtn.getAttribute("target")) === "_blank", "nút demo phải mở tab mới");
+    } else {
+      expect((await demoBtn.count()) === 0, "project chưa deploy mà có nút demo");
+    }
   });
   await check(`${p.slug}: ảnh tải được, gallery + lightbox hoạt động`, async () => {
     await page.evaluate(() => document.querySelectorAll("main img").forEach((i) => (i.loading = "eager")));
