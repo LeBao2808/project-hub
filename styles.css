@@ -411,7 +411,18 @@ a.stat:hover { border-color: var(--line-2); transform: translateY(-2px); }
   color: var(--ink-2);
 }
 
-.gallery { display: grid; gap: 10px; margin-bottom: 36px; }
+.gallery { display: grid; gap: 10px; margin-bottom: 36px; position: relative; }
+.gallery-live {
+  position: absolute; top: 14px; right: 14px; z-index: 2;
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 14px; font-weight: 600; text-decoration: none;
+  color: #fff; background: var(--live);
+  padding: 9px 14px; border-radius: 999px;
+  box-shadow: 0 6px 20px -6px rgba(0, 0, 0, 0.5);
+  transition: transform 0.15s;
+}
+.gallery-live:hover { transform: translateY(-1px); }
+.gallery-live .pulse { background: #fff; }
 .gallery-main {
   position: relative;
   border-radius: var(--radius);

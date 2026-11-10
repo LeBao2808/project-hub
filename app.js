@@ -324,6 +324,11 @@
         </header>
 
         <div class="gallery">
+          ${
+            p.demo
+              ? `<a class="gallery-live" href="${esc(p.demo)}" target="_blank" rel="noopener"><i class="pulse"></i>Mở app thật ${extIcon}</a>`
+              : ""
+          }
           <button class="gallery-main${gallery[0].portrait ? " portrait" : ""}" type="button" id="gmain" aria-label="Phóng to ảnh">
             <img src="${esc(gallery[0].src)}" alt="${esc(gallery[0].caption)}" />
             <figcaption>${esc(gallery[0].caption)}</figcaption>

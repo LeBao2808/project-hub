@@ -52,7 +52,7 @@ for (const p of projects) {
 
 test("index.html nạp data trước app.js", () => {
   const html = readFileSync(path.join(root, "index.html"), "utf8");
-  const a = html.indexOf('src="data/projects.js"');
-  const b = html.indexOf('src="app.js"');
+  const a = html.search(/src="data\/projects\.js(\?v=[\w.]+)?"/);
+  const b = html.search(/src="app\.js(\?v=[\w.]+)?"/);
   assert.ok(a > 0 && b > a);
 });

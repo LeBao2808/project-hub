@@ -170,6 +170,7 @@ for (const p of projects) {
     if (p.demo) {
       expect((await demoBtn.getAttribute("href")) === p.demo, "nút bản chạy thật sai link");
       expect((await demoBtn.getAttribute("target")) === "_blank", "nút demo phải mở tab mới");
+      expect((await page.locator("a.gallery-live").getAttribute("href")) === p.demo, "nút Mở app trên ảnh sai link");
     } else {
       expect((await demoBtn.count()) === 0, "project chưa deploy mà có nút demo");
     }
