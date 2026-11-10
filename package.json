@@ -1,0 +1,22 @@
+{
+  "name": "project-hub",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Danh mục tất cả project của LeBao2808: tool, app, game, extension — landing page + trang chi tiết cách dùng.",
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "scan": "node scripts/scan.mjs",
+    "shots": "node scripts/screenshots.mjs",
+    "test": "node --test tests/",
+    "test:e2e": "node tests-e2e/e2e.mjs",
+    "check": "npm test && npm run scan && npm run test:e2e"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "playwright": "^1.48.2"
+  }
+}
