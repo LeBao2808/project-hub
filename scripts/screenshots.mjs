@@ -75,6 +75,15 @@ const jobs = {
       ["/tips", "tips.jpg"],
     ]),
 
+  // Nên nhập dữ liệu mẫu trước khi chụp, để ảnh không lộ danh mục thật.
+  "finance-tracker": (browser) =>
+    pages(browser, "finance-tracker", "http://localhost:3103", [
+      ["/", "dashboard.jpg"],
+      ["/stocks", "stocks.jpg"],
+      ["/gold", "gold.jpg"],
+      ["/transactions", "transactions.jpg"],
+    ]),
+
   "village-defense-live": async (browser) => {
     const base = "http://localhost:3102";
     const ctx = await browser.newContext();
@@ -112,6 +121,7 @@ const health = {
   "aurora-hotel": "http://localhost:3000",
   "learning-english": "http://localhost:3101",
   "village-defense-live": "http://localhost:3102",
+  "finance-tracker": "http://localhost:3103",
 };
 
 const wanted = process.argv.slice(2);

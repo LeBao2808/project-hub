@@ -8,6 +8,7 @@ Danh mục tất cả project của tôi ([LeBao2808](https://github.com/LeBao28
 | [Claude Pixel BG](https://github.com/LeBao2808/claude-pixel-bg) | Extension | Hình nền pixel-art động cho claude.ai và VS Code | — |
 | [Aurora Riverside Hotel](https://github.com/LeBao2808/aurora-hotel) | App | Website khách sạn, kiến trúc microservice | [aurora-hotel-red.vercel.app](https://aurora-hotel-red.vercel.app) |
 | [TOEIC Speaking Coach](https://github.com/LeBao2808/learning-english) | App | Luyện nói/viết TOEIC với AI Gemini | [learning-english-xi.vercel.app](https://learning-english-xi.vercel.app) |
+| [Ví Của Tôi](https://github.com/LeBao2808/finance-tracker) | App | Quản lý tài sản: chứng khoán, vàng, tiền mặt quy đổi VND | [vi-cua-toi.vercel.app](https://vi-cua-toi.vercel.app) |
 | [Làng Phòng Thủ](https://github.com/LeBao2808/village-defense-live) | Game | Game tương tác TikTok LIVE | — |
 
 ## Xem
@@ -21,6 +22,20 @@ Site là HTML/CSS/JS thuần, không cần build:
 Phím tắt: `/` để tìm kiếm (gõ không dấu cũng được), `Esc` để xoá tìm kiếm. Trong ảnh phóng to dùng `←` `→` để chuyển ảnh, `Esc` để đóng.
 
 ## Thêm project mới
+
+**Cách nhanh (nhờ Claude Code):** mở Claude Code và nói *"ship project &lt;tên thư mục&gt;"*. Skill `ship-project` sẽ làm hết các bước dưới đây: push GitHub, deploy Vercel, chụp ảnh, thêm vào danh mục, chạy kiểm thử và push project-hub.
+
+**Deploy project lên GitHub + Vercel:**
+
+```bash
+npm run ship -- <thư-mục>            # vd: npm run ship -- finance-tracker
+npm run ship -- <thư-mục> --no-env   # không đẩy .env.local lên Vercel
+npm run ship -- <thư-mục> --no-vercel  # chỉ push GitHub (tool / extension / game chạy local)
+```
+
+Script [scripts/ship.mjs](scripts/ship.mjs) yêu cầu repo đã commit hết. Nếu repo chưa có remote, script tạo repo GitHub bằng `gh` (cần `winget install GitHub.cli` và `gh auth login` một lần). Sau đó script link project Vercel, đẩy biến trong `.env.local` lên môi trường production, deploy rồi in ra link `repo` và `demo`.
+
+**Thêm vào danh mục (làm tay):**
 
 1. Chạy `npm run scan`. Script quét thư mục cha (`D:\Project`) và liệt kê các repo git chưa có trong danh mục, kèm link remote và ngày commit gần nhất. Script cũng cảnh báo khi một repo có commit mới hơn ngày ghi trong danh mục.
 2. Mở [data/projects.js](data/projects.js), copy một khối project có sẵn rồi sửa lại. Các trường:
@@ -37,6 +52,7 @@ Phím tắt: `/` để tìm kiếm (gõ không dấu cũng được), `Esc` đ�
 
 3. Đặt ảnh vào `assets/<slug>/`. Có thể dùng `npm run shots` để chụp tự động (xem bên dưới).
 4. Chạy `npm run check`.
+5. Commit và push lên `main`. GitHub Pages tự deploy sau khi test pass.
 
 ## Cập nhật ảnh chụp
 

@@ -306,6 +306,84 @@ window.PROJECTS = [
   },
 
   {
+    slug: "finance-tracker",
+    name: "Ví Của Tôi",
+    tagline: "Quản lý tài sản cá nhân: chứng khoán, vàng, tiền mặt, quy đổi ra VND theo giá hiện tại.",
+    category: "app",
+    accent: "#8b5cf6",
+    status: "Online",
+    updated: "2026-11-12",
+    repo: "https://github.com/LeBao2808/finance-tracker",
+    demo: "https://vi-cua-toi.vercel.app",
+    demoNote:
+      "Bản online chứa dữ liệu cá nhân nên được khoá bằng mật khẩu. Muốn dùng thử, hãy clone repo và chạy trên máy của bạn.",
+    folder: "finance-tracker",
+    stack: ["Next.js 15", "React 19", "TypeScript", "Tailwind v4", "MongoDB / Mongoose", "Recharts", "DNSE OpenAPI"],
+    tags: ["finance", "chứng khoán", "vàng", "portfolio", "dashboard"],
+    cover: "assets/finance-tracker/dashboard.jpg",
+    gallery: [
+      { src: "assets/finance-tracker/dashboard.jpg", caption: "Tổng quan: tổng tài sản, cơ cấu và từng danh mục" },
+      { src: "assets/finance-tracker/stocks.jpg", caption: "Danh mục cổ phiếu với giá trực tuyến từ DNSE" },
+      { src: "assets/finance-tracker/gold.jpg", caption: "Vàng đang giữ và bảng giá vàng hôm nay" },
+      { src: "assets/finance-tracker/transactions.jpg", caption: "Lịch sử giao dịch và dòng vốn theo tháng" },
+    ],
+    summary:
+      "Ghi lại các lần mua bán cổ phiếu, vàng và nạp rút tiền, app tự tính số đang nắm giữ, giá vốn bình quân, lãi lỗ và tổng tài sản quy ra VND theo giá thị trường. Giá cổ phiếu lấy từ DNSE OpenAPI, giá vàng từ vang.today (SJC, PNJ, DOJI, Bảo Tín…), tỷ giá từ Vietcombank.",
+    features: [
+      "Tổng tài sản quy đổi VND, lãi/lỗ, thay đổi trong ngày và biểu đồ cơ cấu 3 danh mục",
+      "Chứng khoán: từng mã với khối lượng, giá vốn TB, giá hiện tại, giá trị, lãi/lỗ, tỷ trọng; tổng cộng cả danh mục",
+      "Vàng: định giá theo giá mua vào của tiệm, nhập theo lượng hoặc chỉ, có bảng giá vàng hôm nay",
+      "Tiền mặt & ngoại tệ theo từng tài khoản, quy đổi theo tỷ giá Vietcombank",
+      "Giá vốn bình quân gia quyền, ghi nhận lãi/lỗ đã chốt khi bán",
+      "Biểu đồ dòng vốn 12 tháng và tăng trưởng tài sản theo ngày",
+      "Tự điền giá hiện tại khi nhập lệnh; chặn bán vượt số đang có và mã không tồn tại",
+      "Nguồn giá lỗi thì dùng giá gần nhất đã lưu trong MongoDB",
+    ],
+    requirements: ["Node.js 20+", "MongoDB (Atlas hoặc local)", "DNSE API key + secret"],
+    quickstart: [
+      { label: "Cài đặt", code: "npm install" },
+      { label: "Tạo file môi trường, rồi điền MONGODB_URI và DNSE_API_KEY / DNSE_API_SECRET", code: "cp .env.example .env.local" },
+      { label: "Chạy → http://localhost:3000", code: "npm run dev" },
+    ],
+    usage: [
+      {
+        title: "Thêm tài sản",
+        steps: [
+          "Vào **Chứng khoán**, **Vàng** hoặc **Tiền mặt**, bấm **Thêm giao dịch**.",
+          "Chọn Mua/Bán (hoặc Nạp/Rút), nhập mã và số lượng; giá hiện tại được điền sẵn, sửa lại nếu giá khớp khác.",
+          "Dùng nút `+` / `−` cạnh từng dòng để mua thêm hoặc bán nhanh.",
+        ],
+      },
+      {
+        title: "Xem tổng quan",
+        steps: [
+          "Trang **Tổng quan** cộng giá trị của cả 3 danh mục theo giá hiện tại, tự làm mới mỗi phút.",
+          "Trang **Giao dịch** lọc theo danh mục, tìm theo mã hoặc ghi chú, sửa hoặc xoá giao dịch.",
+        ],
+      },
+      {
+        title: "Deploy lên Vercel",
+        steps: [
+          "Chạy `npx vercel link`, rồi thêm các biến trong `.env.example` bằng `npx vercel env add` (nhớ đặt `APP_PASSWORD`).",
+          "Trên MongoDB Atlas, vào **Network Access** và cho phép `0.0.0.0/0` (Vercel không có IP cố định).",
+          "Chạy `npx vercel deploy --prod`.",
+        ],
+      },
+    ],
+    commands: [
+      { cmd: "npm run dev", desc: "Chạy dev server" },
+      { cmd: "npm run build && npm start", desc: "Bản production" },
+      { cmd: "npm run lint", desc: "ESLint" },
+    ],
+    notes: [
+      "Giá DNSE trả về theo nghìn đồng; app đã nhân 1.000 để ra VND.",
+      "Đặt `APP_PASSWORD` trên bản deploy để khoá app bằng mật khẩu (HTTP Basic Auth); chạy local không đặt thì không cần đăng nhập.",
+      "DNSE có thể chặn request từ server nước ngoài; khi đó app dùng giá cổ phiếu gần nhất đã lưu.",
+      "`package.json` có `overrides.magic-string` để Tailwind v4 chạy được trên Node < 20.19.",
+    ],
+  },
+
+  {
     slug: "village-defense-live",
     name: "Làng Phòng Thủ",
     tagline: "Game tương tác TikTok LIVE: người xem thả tim, bình luận, tặng quà để bảo vệ làng.",
