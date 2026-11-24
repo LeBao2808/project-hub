@@ -80,6 +80,8 @@ const jobs = {
     pages(browser, "finance-tracker", "http://localhost:3103", [
       ["/", "dashboard.jpg"],
       ["/stocks", "stocks.jpg"],
+      ["/analysis?symbol=FPT", "analysis.jpg"],
+      ["/plan", "plan.jpg"],
       ["/gold", "gold.jpg"],
       ["/transactions", "transactions.jpg"],
     ]),

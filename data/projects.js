@@ -308,28 +308,33 @@ window.PROJECTS = [
   {
     slug: "finance-tracker",
     name: "Ví Của Tôi",
-    tagline: "Quản lý tài sản cá nhân: chứng khoán, vàng, tiền mặt, quy đổi ra VND theo giá hiện tại.",
+    tagline: "Quản lý tài sản cá nhân, phân tích cổ phiếu và thời khoá biểu theo tuần.",
     category: "app",
     accent: "#8b5cf6",
     status: "Online",
-    updated: "2026-11-12",
+    updated: "2026-11-24",
     repo: "https://github.com/LeBao2808/finance-tracker",
     demo: "https://vi-cua-toi.vercel.app",
     demoNote:
       "Bản online chứa dữ liệu cá nhân nên được khoá bằng mật khẩu. Muốn dùng thử, hãy clone repo và chạy trên máy của bạn.",
     folder: "finance-tracker",
-    stack: ["Next.js 15", "React 19", "TypeScript", "Tailwind v4", "MongoDB / Mongoose", "Recharts", "DNSE OpenAPI"],
-    tags: ["finance", "chứng khoán", "vàng", "portfolio", "dashboard"],
+    stack: ["Next.js 15", "React 19", "TypeScript", "Tailwind v4", "MongoDB / Mongoose", "Recharts", "DNSE OpenAPI", "VNDirect API"],
+    tags: ["finance", "chứng khoán", "phân tích kỹ thuật", "vàng", "portfolio", "dashboard", "thời khoá biểu"],
     cover: "assets/finance-tracker/dashboard.jpg",
     gallery: [
       { src: "assets/finance-tracker/dashboard.jpg", caption: "Tổng quan: tổng tài sản, cơ cấu và từng danh mục" },
       { src: "assets/finance-tracker/stocks.jpg", caption: "Danh mục cổ phiếu với giá trực tuyến từ DNSE" },
+      { src: "assets/finance-tracker/analysis.jpg", caption: "Phân tích một mã: cơ bản, kỹ thuật và biểu đồ" },
+      { src: "assets/finance-tracker/plan.jpg", caption: "Kế hoạch: thời khoá biểu theo tuần, kéo thả để sắp xếp" },
       { src: "assets/finance-tracker/gold.jpg", caption: "Vàng đang giữ và bảng giá vàng hôm nay" },
       { src: "assets/finance-tracker/transactions.jpg", caption: "Lịch sử giao dịch và dòng vốn theo tháng" },
     ],
     summary:
-      "Ghi lại các lần mua bán cổ phiếu, vàng và nạp rút tiền, app tự tính số đang nắm giữ, giá vốn bình quân, lãi lỗ và tổng tài sản quy ra VND theo giá thị trường. Giá cổ phiếu lấy từ DNSE OpenAPI, giá vàng từ vang.today (SJC, PNJ, DOJI, Bảo Tín…), tỷ giá từ Vietcombank.",
+      "Ghi lại các lần mua bán cổ phiếu, vàng và nạp rút tiền, app tự tính số đang nắm giữ, giá vốn bình quân, lãi lỗ và tổng tài sản quy ra VND theo giá thị trường. Giá cổ phiếu lấy từ DNSE OpenAPI, giá vàng từ vang.today (SJC, PNJ, DOJI, Bảo Tín…), tỷ giá từ Vietcombank. Ngoài ra có trang phân tích từng mã cổ phiếu và thời khoá biểu cá nhân.",
     features: [
+      "Phân tích cổ phiếu: P/E, P/B so với ngành, EPS, ROE, FCF, DCF; MA, RSI, MACD, Bollinger, hỗ trợ/kháng cự, Fibonacci, mô hình nến và giá",
+      "Chấm mã theo 8 chiến lược (giá trị, tăng trưởng, CANSLIM, lướt sóng…) và tính khối lượng mua theo mức lỗ chấp nhận",
+      "Kế hoạch tuần: thể loại việc dùng lại nhiều lần, kéo thả, lặp hằng tuần, danh sách việc hôm nay",
       "Tổng tài sản quy đổi VND, lãi/lỗ, thay đổi trong ngày và biểu đồ cơ cấu 3 danh mục",
       "Chứng khoán: từng mã với khối lượng, giá vốn TB, giá hiện tại, giá trị, lãi/lỗ, tỷ trọng; tổng cộng cả danh mục",
       "Vàng: định giá theo giá mua vào của tiệm, nhập theo lượng hoặc chỉ, có bảng giá vàng hôm nay",
@@ -355,6 +360,22 @@ window.PROJECTS = [
         ],
       },
       {
+        title: "Phân tích cổ phiếu",
+        steps: [
+          "Vào **Phân tích**, nhập mã 3 ký tự (ví dụ HPG) rồi bấm **Phân tích**.",
+          "Xem tín hiệu cơ bản, kỹ thuật và các chiến lược hợp với mã; chỉnh vốn, giá cắt lỗ và giả định DCF ở cuối trang.",
+          "Kết quả tính tự động theo quy tắc, chỉ để tham khảo, không phải khuyến nghị mua bán.",
+        ],
+      },
+      {
+        title: "Lập kế hoạch tuần",
+        steps: [
+          "Vào **Kế hoạch**, bấm **Thể loại** để tạo loại việc (tên, màu, thời lượng).",
+          "Kéo thể loại vào lịch hoặc bấm ô giờ trống; chọn một lần hoặc lặp hằng tuần.",
+          "Kéo để đổi giờ; bấm dấu X hoặc kéo về khung Thể loại để bỏ ra. Trên điện thoại dùng cách bấm.",
+        ],
+      },
+      {
         title: "Xem tổng quan",
         steps: [
           "Trang **Tổng quan** cộng giá trị của cả 3 danh mục theo giá hiện tại, tự làm mới mỗi phút.",
@@ -364,7 +385,7 @@ window.PROJECTS = [
       {
         title: "Deploy lên Vercel",
         steps: [
-          "Chạy `npx vercel link`, rồi thêm các biến trong `.env.example` bằng `npx vercel env add` (nhớ đặt `APP_PASSWORD`).",
+          "Chạy `npx vercel link`, rồi thêm các biến trong `.env.example` bằng `npx vercel env add` (nhớ đặt `APP_PASSWORD` và `SESSION_SECRET`).",
           "Trên MongoDB Atlas, vào **Network Access** và cho phép `0.0.0.0/0` (Vercel không có IP cố định).",
           "Chạy `npx vercel deploy --prod`.",
         ],
@@ -377,8 +398,8 @@ window.PROJECTS = [
     ],
     notes: [
       "Giá DNSE trả về theo nghìn đồng; app đã nhân 1.000 để ra VND.",
-      "Đặt `APP_PASSWORD` trên bản deploy để khoá app bằng mật khẩu (HTTP Basic Auth); chạy local không đặt thì không cần đăng nhập.",
-      "DNSE có thể chặn request từ server nước ngoài; khi đó app dùng giá cổ phiếu gần nhất đã lưu.",
+      "Đặt `APP_PASSWORD` và `SESSION_SECRET` (chuỗi ngẫu nhiên) trên bản deploy để khoá app bằng form đăng nhập; chạy local không đặt thì không cần đăng nhập.",
+      "DNSE OpenAPI không trả lời server ngoài Việt Nam (như Vercel); khi đó app dùng API biểu đồ công khai của DNSE, rồi mới tới giá gần nhất đã lưu.",
       "`package.json` có `overrides.magic-string` để Tailwind v4 chạy được trên Node < 20.19.",
     ],
   },

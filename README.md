@@ -8,7 +8,7 @@ Danh mục tất cả project của tôi ([LeBao2808](https://github.com/LeBao28
 | [Claude Pixel BG](https://github.com/LeBao2808/claude-pixel-bg) | Extension | Hình nền pixel-art động cho claude.ai và VS Code | — |
 | [Aurora Riverside Hotel](https://github.com/LeBao2808/aurora-hotel) | App | Website khách sạn, kiến trúc microservice | [aurora-hotel-red.vercel.app](https://aurora-hotel-red.vercel.app) |
 | [TOEIC Speaking Coach](https://github.com/LeBao2808/learning-english) | App | Luyện nói/viết TOEIC với AI Gemini | [learning-english-xi.vercel.app](https://learning-english-xi.vercel.app) |
-| [Ví Của Tôi](https://github.com/LeBao2808/finance-tracker) | App | Quản lý tài sản: chứng khoán, vàng, tiền mặt quy đổi VND | [vi-cua-toi.vercel.app](https://vi-cua-toi.vercel.app) |
+| [Ví Của Tôi](https://github.com/LeBao2808/finance-tracker) | App | Quản lý tài sản, phân tích cổ phiếu, thời khoá biểu tuần | [vi-cua-toi.vercel.app](https://vi-cua-toi.vercel.app) |
 | [Làng Phòng Thủ](https://github.com/LeBao2808/village-defense-live) | Game | Game tương tác TikTok LIVE | — |
 
 ## Xem
